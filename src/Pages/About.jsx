@@ -234,13 +234,13 @@ const AboutPage = () => {
               data-aos="fade-right"
               data-aos-duration="1500"
             >
-              <p >
+              <p className="text-start">
                 Atuo principalmente na criação de interfaces, layouts e
                 componentes, com foco em entregar experiências visuais bem
                 estruturadas, modernas e responsivas.
               </p>
 
-              <p >
+              <p className="text-start">
                 Apesar da formação full stack, tenho me desenvolvido com mais
                 consistência na área de front-end, onde consigo unir lógica,
                 estética e usabilidade de forma prática. Tenho familiaridade com
@@ -254,13 +254,13 @@ const AboutPage = () => {
 
               {showFullText && (
                 <>
-                  <p >
+                  <p className="text-start">
                     Também venho ampliando meus conhecimentos em bancos de dados
                     relacionais e estudando maneiras de integrar inteligência
                     artificial aos meus projetos.
                   </p>
 
-                  <p >
+                  <p className="text-start">
                     Sou comprometido com boas práticas de programação,
                     organização de código e construção de soluções que facilitem
                     a vida de quem desenvolve e de quem usa. Sigo em constante
