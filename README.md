@@ -10,7 +10,7 @@ Este repositório contém o código-fonte do meu portfólio pessoal. Ele foi bas
 
 Após o deploy, o site está disponível em:
 
-**URL:** [adicione o link do Vercel aqui]
+**URL:** https://portfolio-ssebastianaugusttos-projects.vercel.app/
 
 ---
 
@@ -18,7 +18,7 @@ Após o deploy, o site está disponível em:
 
 - ReactJS
 - Tailwind CSS
-- Supabase (opcional, para dados dinâmicos)
+- Supabase (para dados dinâmicos)
 - Framer Motion
 - AOS (Animate on Scroll)
 - Lucide Icons
