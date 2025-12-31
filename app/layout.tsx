@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Sebastian Augusto - Portfolio",
-  description: "Desenvolvedor Full Stack com foco em Front-End",
+  description: "Desenvolvedor Full Stack JavaScript Ecosystem & Software Architecture",
 };
 
 export default function RootLayout({

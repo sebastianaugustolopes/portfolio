@@ -19,7 +19,7 @@ import type { PersonalInfo } from "@/db/schema";
 const Home = () => {
   const skills = ["Nodejs","JavaScript", "TypeScript", "Nextjs"];
   const [typedText, setTypedText] = useState("");
-  const fullText = "Foco em Front-End e Criação de Interfaces.";
+  const fullText = "JavaScript Ecosystem & Software Architecture";
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
 
   useEffect(() => {
