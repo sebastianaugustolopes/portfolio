@@ -5,12 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Sparkles, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ContactModal from "./ContactModal";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -25,14 +23,10 @@ const Navbar = () => {
     { name: "Início", href: "/" },
     { name: "Sobre", href: "/home#sobre" },
     { name: "Portfólio", href: "/home#portfolio" },
-    { name: "Contato", href: "#" },
+    { name: "Contato", href: "/home#contato" },
   ];
 
   const handleNavClick = (href: string, e: React.MouseEvent) => {
-    if (href === "#") {
-      e.preventDefault();
-      setIsContactOpen(true);
-    }
     setIsMobileMenuOpen(false);
   };
 
@@ -119,18 +113,19 @@ const Navbar = () => {
 
                 {/* Enhanced CTA Button */}
                 <div className="hidden md:flex items-center gap-3">
-                  <Button
-                    variant="gradient"
-                    size="sm"
-                    onClick={() => setIsContactOpen(true)}
-                    className="group relative overflow-hidden px-6 hover:scale-105 transition-all duration-300"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      <Sparkles size={14} className="transition-transform duration-300 group-hover:rotate-12" />
-                      Contato
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </Button>
+                  <Link href="/home#contato">
+                    <Button
+                      variant="gradient"
+                      size="sm"
+                      className="group relative overflow-hidden px-6 hover:scale-105 transition-all duration-300"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        <Sparkles size={14} className="transition-transform duration-300 group-hover:rotate-12" />
+                        Contato
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </Button>
+                  </Link>
                 </div>
 
                 {/* Enhanced Mobile Menu Button */}
@@ -193,19 +188,17 @@ const Navbar = () => {
                       );
                     })}
                     
-                    <Button
-                      variant="gradient"
-                      size="sm"
-                      onClick={() => {
-                        setIsContactOpen(true);
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="w-full mt-2 animate-fade-in"
-                      style={{ animationDelay: `${navLinks.length * 50}ms` }}
-                    >
-                      <Sparkles size={14} className="mr-2" />
-                      Contato
-                    </Button>
+                    <Link href="/home#contato" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button
+                        variant="gradient"
+                        size="sm"
+                        className="w-full mt-2 animate-fade-in"
+                        style={{ animationDelay: `${navLinks.length * 50}ms` }}
+                      >
+                        <Sparkles size={14} className="mr-2" />
+                        Contato
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -213,8 +206,6 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-
-      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </>
   );
 };

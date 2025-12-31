@@ -47,6 +47,33 @@ const Home = () => {
     fetchPersonalInfo();
   }, []);
 
+  // Handle hash navigation when coming from other pages
+  useEffect(() => {
+    const handleHashScroll = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        // Wait for page to render
+        setTimeout(() => {
+          const element = document.querySelector(hash);
+          if (element) {
+            const offset = 100; // Offset for navbar
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      }
+    };
+
+    handleHashScroll();
+    window.addEventListener('hashchange', handleHashScroll);
+    return () => window.removeEventListener('hashchange', handleHashScroll);
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-background relative">
