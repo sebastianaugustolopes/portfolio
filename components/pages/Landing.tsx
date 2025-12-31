@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 
-const heroBg = "/hero-bg.jpg";
+const heroBg = "/bg-studio.jpg";
 
 const Landing = () => {
   return (
@@ -103,10 +103,7 @@ const Landing = () => {
             <p 
               className="text-sm sm:text-base md:text-lg text-muted-foreground/90 max-w-2xl mb-8 leading-relaxed animate-fade-in opacity-0 font-light"
               style={{ animationDelay: '0.7s', animationFillMode: 'forwards' }}
-            >
-              Transformando ideias complexas em interfaces elegantes. 
-              Especializado em <span className="text-primary/90 font-medium">React</span>, <span className="text-primary/90 font-medium">Next.js</span> e JavaScript moderno.
-            </p>
+            >Convertendo lógica e arquitetura em interfaces funcionais e consistentes.</p>
 
             {/* Enhanced CTA Buttons */}
             <div 

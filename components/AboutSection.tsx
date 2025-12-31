@@ -121,7 +121,7 @@ const AboutSection = () => {
               </DialogTitle>
               <div className="flex items-center gap-3">
                 <a
-                  href="/documents/Sebastian CV.docx.pdf"
+                  href="/documents/sebastian_augusto_cv_docx.pdf"
                   download
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
@@ -142,7 +142,7 @@ const AboutSection = () => {
           
           <div className="flex-1 overflow-hidden p-6">
             <iframe
-              src="/documents/Sebastian CV.docx.pdf"
+              src="/documents/sebastian_augusto_cv_docx.pdf"
               className="w-full h-full rounded-lg border border-border/50"
               title="CV Preview"
             />

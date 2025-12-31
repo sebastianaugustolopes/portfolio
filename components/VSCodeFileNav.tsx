@@ -181,7 +181,7 @@ const VSCodeFileNav = () => {
           type: 'file',
           icon: FileDown,
           iconColor: 'text-red-400',
-          href: '/documents/Sebastian CV.docx.pdf',
+          href: '/documents/sebastian_augusto_cv_docx.pdf',
         },
       ],
     },
