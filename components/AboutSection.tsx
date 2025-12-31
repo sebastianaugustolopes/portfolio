@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Download, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -86,10 +87,11 @@ const AboutSection = () => {
             <div className="relative flex justify-center">
               <div className="relative w-[400px] md:w-[550px] h-[680px] md:h-[700px] rounded-3xl overflow-hidden shadow-2xl">
                 {/* Banner Image */}
-                <img 
+                <Image 
                   src="/banner.jpg"
                   alt={personalInfo.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
                 
                 {/* Dark overlay on top and bottom */}

@@ -1,15 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface IconProps {
   src?: string;
   alt: string;
   className?: string;
   fallback?: string | React.ReactNode;
+  width?: number;
+  height?: number;
 }
 
-const Icon = ({ src, alt, className = "", fallback }: IconProps) => {
+const Icon = ({ src, alt, className = "", fallback, width, height }: IconProps) => {
+  // Extract size from className if width/height not provided
+  const sizeMatch = className.match(/(?:w-|h-)(\d+)/);
+  const defaultSize = sizeMatch ? parseInt(sizeMatch[1]) * 4 : 24; // Tailwind units (1 = 4px)
+  const finalWidth = width || defaultSize;
+  const finalHeight = height || defaultSize;
   const [error, setError] = useState(false);
 
   // If there's no src or an error occurred, show fallback
@@ -24,14 +32,16 @@ const Icon = ({ src, alt, className = "", fallback }: IconProps) => {
     return null;
   }
 
-  // Use img tag for SVGs - simpler and more direct
+  // Use Next.js Image component for optimized images
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
+      width={finalWidth}
+      height={finalHeight}
       className={className}
       onError={() => setError(true)}
-      loading="lazy"
+      unoptimized={src.endsWith('.svg')}
       style={{ display: 'block' }}
     />
   );

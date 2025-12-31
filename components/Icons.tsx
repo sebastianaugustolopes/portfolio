@@ -399,6 +399,8 @@ export const IconRenderer = ({ icon, className = "", size }: IconRendererProps) 
       alt={icon.name}
       fallback={icon.fallback}
       className={className}
+      width={size}
+      height={size}
     />
   );
 };

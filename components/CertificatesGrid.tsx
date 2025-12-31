@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Calendar } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Certificate } from "@/db/schema";
@@ -45,12 +46,13 @@ const CertificatesGrid = () => {
         >
           {cert.image && (
             <div className="relative w-full h-48 overflow-hidden">
-              <img 
+              <Image 
                 src={cert.image} 
                 alt={cert.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent z-10" />
             </div>
           )}
           <CardContent className="p-6 space-y-4">
