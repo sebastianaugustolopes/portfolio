@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { projects, certificates, personalInfo } from "./schema";
+import { projects, certificates, personalInfo, type NewPersonalInfo, type NewProject, type NewCertificate } from "./schema";
 
 async function seed() {
   console.log("🌱 Starting seed...");
@@ -10,7 +10,7 @@ async function seed() {
   await db.delete(projects);
 
   // Seed Personal Info
-  const personalData = await db.insert(personalInfo).values({
+  await db.insert(personalInfo).values({
     name: "Sebastian Augusto",
     age: 19,
     phone: "+55 31 987962420",
@@ -22,12 +22,12 @@ async function seed() {
       linkedin: "https://www.linkedin.com/in/sebastianaugusto/",
       instagram: "https://instagram.com/_ssebastianaugusto",
     },
-  }).returning();
+  } as NewPersonalInfo).returning();
 
   console.log("✅ Personal info seeded");
 
   // Seed Projects
-  await db.insert(projects).values([
+  const projectsData = [
     {
       title: "Beweare E-commerce Web",
       description: "O **Bewear Ecommerce** é uma plataforma de comércio eletrônico voltada para oferecer uma experiência de compra e venda moderna, segura e intuitiva. O sistema prioriza desempenho, organização das informações e clareza no fluxo de navegação, alinhando-se a boas práticas de UX/UI para simular de forma realista o funcionamento de uma loja virtual completa. A aplicação foi estruturada com foco em escalabilidade, permitindo a inclusão de novos produtos, atualização de conteúdos e ajustes visuais de forma consistente e segura. O projeto abrange desde a camada de apresentação até a lógica de negócios, incluindo autenticação de usuários, persistência de sessão e medidas de proteção de dados, refletindo cenários reais do mercado de comércio digital.",
@@ -61,12 +61,14 @@ async function seed() {
       repoUrl: "https://github.com/sebastianaugustolopes/bewear-ecommerce",
       image: "https://i.pinimg.com/736x/d2/a1/fe/d2a1fe6a8cf80c87c2182bcb0b56bad2.jpg",
     },
-  ]);
+  ];
+  
+  await db.insert(projects).values(projectsData as NewProject[]);
 
   console.log("✅ Projects seeded");
 
   // Seed Certificates
-  await db.insert(certificates).values([
+  const certificatesData = [
     {
       name: "Full Stack Java Professional",
       institution: "EBAC",
@@ -79,7 +81,9 @@ async function seed() {
       date: "2023-09-11",
       image: "https://github.com/sebastianaugustolopes/portfolio_data/blob/main/public/certificado_2.png?raw=true"
     },
-  ]);
+  ];
+  
+  await db.insert(certificates).values(certificatesData as NewCertificate[]);
 
   console.log("✅ Certificates seeded");
   console.log("🎉 Seed completed successfully!");
