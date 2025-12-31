@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { BadgeCheck, User, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import DevTerminal from "@/components/DevTerminal";
 import type { PersonalInfo } from "@/db/schema";
 import { getFloatingIcons, IconRenderer } from "@/components/Icons";
 
@@ -30,14 +32,14 @@ const ProfileCard = () => {
 
   if (loading || !personalInfo) {
     return (
-      <div className="relative w-[340px] md:w-[380px]">
-        <div className="relative rounded-2xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/40 shadow-2xl h-96 animate-pulse" />
+      <div className="relative w-[400px] md:w-[450px]">
+        <div className="relative rounded-2xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/40 shadow-2xl h-[500px] animate-pulse" />
       </div>
     );
   }
 
   return (
-    <div className="relative w-[340px] md:w-[380px] mt-10 lg:mt-0">
+    <div className="relative w-[400px] md:w-[450px] mt-10 lg:mt-0">
       {/* Floating Icons - Grouped with subtle overlaps */}
       <div className="absolute -top-4 -left-2 w-64 h-32 z-20">
         {floatingIcons.map((icon, index) => {
@@ -70,54 +72,27 @@ const ProfileCard = () => {
       <div className="relative rounded-2xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/40 shadow-2xl">
         {/* Profile Image - Large */}
         <div className="relative h-64 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-card/95" />
-          <img 
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-card/95 z-10" />
+          <Image 
             src={personalInfo.profilePhoto || "/perfil-photo.jpg"}
             alt={personalInfo.name}
-            className="w-full h-full object-cover object-top"
+            fill
+            className="object-cover object-top"
           />
         </div>
 
         {/* Content */}
-        <div className="p-5 space-y-4">
+        <div className="p-6 space-y-5">
           {/* Name with verification */}
           <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-foreground">{personalInfo.name}</h3>
-            <BadgeCheck className="text-primary" size={18} />
+            <h3 className="text-xl font-semibold text-foreground">{personalInfo.name}</h3>
+            <BadgeCheck className="text-primary" size={20} />
           </div>
 
           {/* Bio */}
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            "Desenvolvedor Full Stack Júnior | JavaScript Ecosystem & Software Architecture"
-          </p>
-
-          {/* Info Row */}
-          <div className="flex items-center gap-6 text-sm">
-            <div className="flex items-center gap-1.5 text-muted-foreground">
-              <User size={14} className="text-primary/70" />
-              <span>{personalInfo.age} anos</span>
-            </div>
-            {personalInfo.location && (
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <GraduationCap size={14} className="text-primary/70" />
-                <span>{personalInfo.location.split(",")[0]}</span>
-              </div>
-            )}
+          <div className="text-muted-foreground">
+            <DevTerminal />
           </div>
-
-          {/* Follow Button */}
-          {personalInfo.socialLinks.linkedin && (
-            <a 
-              href={personalInfo.socialLinks.linkedin} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="block"
-            >
-              <Button variant="gradient" size="sm" className="mt-2 text-sm px-6 w-full">
-                Seguir +
-              </Button>
-            </a>
-          )}
         </div>
       </div>
     </div>
