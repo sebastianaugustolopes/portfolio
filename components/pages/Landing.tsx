@@ -1,183 +1,202 @@
+
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, Sparkles, Code2, Rocket, Zap } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ArrowRight, Code2, Rocket, Zap, MousePointer2, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
 
-const heroBg = "/bg-studio.jpg";
+interface Project {
+  id: string;
+  image?: string;
+}
 
-const Landing = () => {
+const Landing: React.FC = () => {
+  const router = useRouter();
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => setProjects(data))
+      .catch((err) => console.error("Failed to fetch projects", err));
+  }, []);
+
+  const navigateToSection = (tab: 'projetos' | 'tecnologias') => {
+    router.push(`/home?tab=${tab}#portfolio`);
+  };
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background">
-      {/* Sophisticated Grid Pattern */}
-      <div className="grid-pattern-elegant" />
-      <div className="noise-texture-refined" />
-      
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[35s] ease-out hover:scale-110"
-        style={{ 
-          backgroundImage: `url(${heroBg})`,
-          transform: 'scale(1.05)',
-        }}
-      />
-      
-      {/* Black Overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/20 to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/30" />
-      
-      {/* Sophisticated Glow Orbs */}
-      <div className="absolute top-1/4 -left-32 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[180px] animate-glow-elegant" />
-      <div className="absolute bottom-1/4 -right-20 w-[550px] h-[550px] bg-accent/12 rounded-full blur-[160px] animate-glow-elegant-delayed" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[150px] animate-pulse-ambient-soft" />
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#050505]">
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="grid-pattern-elegant absolute inset-0 opacity-20" />
+        <div className="noise-texture absolute inset-0" />
 
-      {/* Refined Floating Particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(12)].map((_, i) => (
+        {/* Cinematic Lighting */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[120px] animate-glow" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] animate-glow" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30%] h-[30%] bg-indigo-500/10 rounded-full blur-[150px]" />
+      </div>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute rounded-full animate-float-elegant"
+            className="absolute rounded-full bg-white/20 blur-[1px] animate-float"
             style={{
-              width: `${1.5 + (i % 3) * 0.5}px`,
-              height: `${1.5 + (i % 3) * 0.5}px`,
-              background: i % 3 === 0 
-                ? 'hsl(40 2% 72% / 0.25)' 
-                : i % 3 === 1 
-                ? 'hsl(56 23% 87% / 0.2)' 
-                : 'hsl(80 10% 93% / 0.15)',
-              left: `${8 + i * 8}%`,
-              top: `${15 + (i % 4) * 20}%`,
-              animationDelay: `${i * 0.9}s`,
-              animationDuration: `${10 + (i % 4) * 3}s`,
-              boxShadow: '0 0 15px currentColor, 0 0 30px currentColor'
+              width: `${Math.random() * 4 + 1}px`,
+              height: `${Math.random() * 4 + 1}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${Math.random() * 10 + 10}s`,
+              opacity: Math.random() * 0.5 + 0.1
             }}
           />
         ))}
       </div>
 
-      {/* Radial Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_50%,_hsl(0_0%_0%_/_0.4)_100%)] opacity-30" />
-
       <Navbar />
 
-      {/* Hero Content */}
-      <div className="relative z-10 min-h-screen flex items-center">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="max-w-3xl mx-auto lg:mx-0">
-            
-            {/* Refined Badge Section */}
-            <div className="flex items-center gap-3 mb-8 animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-              <div className="relative">
-                <div className="absolute inset-0 w-12 h-[1.5px] bg-gradient-to-r from-primary/60 to-transparent blur-sm" />
-                <div className="relative w-12 h-[1.5px] bg-gradient-to-r from-primary/60 to-transparent" />
+      <main className="relative z-20 pt-32 pb-20 md:pt-48 md:pb-32">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+
+            {/* Left Content */}
+            <div className="lg:col-span-7 flex flex-col items-start">
+
+              <div className="animate-fade-in opacity-0" style={{ animationDelay: '0.2s' }}>
+                <Badge variant="glow" className="mb-6 gap-2 py-1.5 px-4 backdrop-blur-md bg-white/5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                  </span>
+                  <span className="tracking-wide uppercase text-[10px] font-bold text-white/80">Disponível para novos projetos</span>
+                </Badge>
               </div>
-              <Code2 size={16} className="text-primary/60 animate-pulse-soft" />
-            </div>
-            
-            <div className="animate-fade-in opacity-0 mb-8" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
-              <Badge variant="glow" className="px-4 py-2 text-sm tracking-wider hover:scale-105 transition-all duration-500 cursor-default backdrop-blur-2xl bg-foreground/5 border-foreground/10 group">
-                <Sparkles size={15} className="mr-2 animate-pulse-soft group-hover:rotate-12 transition-transform duration-500" />
-                <span className="font-medium bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">Full Stack Developer</span>
-              </Badge>
-            </div>
 
-            {/* Enhanced Title */}
-            <h1 
-              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] animate-fade-in opacity-0 tracking-tight"
-              style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}
-            >
-              <span className="text-foreground/95 font-light block mb-2">Criando</span>
-              <span className="bg-gradient-to-br from-foreground via-primary to-accent bg-clip-text text-transparent font-extrabold block mb-2 relative">
-                experiências
-                <div className="absolute -inset-2 bg-gradient-to-r from-primary/10 to-accent/10 blur-2xl -z-10" />
-              </span>
-              <div className="flex flex-wrap items-baseline gap-2 sm:gap-3">
-                <span className="text-foreground/95 font-light">digitais</span>
-                <span className="bg-gradient-to-br from-accent via-primary to-foreground bg-clip-text text-transparent font-extrabold">únicas</span>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-8 animate-fade-in opacity-0" style={{ animationDelay: '0.4s' }}>
+                FULL STACK <br />
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">PORTFOLIO </span>
+                  <div className="absolute -bottom-2 left-0 w-full h-1.5 bg-gradient-to-r from-purple-500 to-transparent blur-sm rounded-full opacity-50" />
+                </span> <br />
+                DEVELOPER
+              </h1>
+
+              <p className="text-md text-white/50 max-w-xl leading-relaxed mb-10 animate-fade-in opacity-0" style={{ animationDelay: '0.6s' }}>
+                Projetos full stack focados na criação de aplicações web estruturadas e funcionais. Aplicações que refletem a aplicação de conceitos fundamentais de programação, integração entre front-end e back-end, manipulação de dados e o uso de boas práticas no desenvolvimento Web/Software.
+              </p>
+
+              <div className="flex flex-wrap gap-4 animate-fade-in opacity-0" style={{ animationDelay: '0.8s' }}>
+                <Button variant="hero" size="lg" className="group" onClick={() => router.push('/home')}>
+                  <span>Explorar Projetos</span>
+                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+                </Button>
+                <Button variant="glass" size="lg" className="group border-white/5" onClick={() => navigateToSection('tecnologias')}>
+                  <Code2 className="mr-2 text-purple-400" size={20} />
+                  <span>Stack Técnica</span>
+                </Button>
               </div>
-            </h1>
 
-            {/* Refined Subtitle */}
-            <p 
-              className="text-sm sm:text-base md:text-lg text-muted-foreground/90 max-w-2xl mb-8 leading-relaxed animate-fade-in opacity-0 font-light"
-              style={{ animationDelay: '0.7s', animationFillMode: 'forwards' }}
-            >Convertendo lógica e arquitetura em interfaces funcionais e consistentes.</p>
-
-            {/* Enhanced CTA Buttons */}
-            <div 
-              className="flex flex-col sm:flex-row gap-3 mb-10 animate-fade-in opacity-0"
-              style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}
-            >
-              <Link href="/home">
-                <Button variant="hero" size="lg" className="group relative w-full sm:w-auto text-sm sm:text-base px-6 sm:px-8 py-5 sm:py-6 hover:scale-105 transition-all duration-500 overflow-hidden shadow-elegant">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <Rocket size={18} className="relative z-10 mr-2 transition-all duration-500 group-hover:-translate-y-1 group-hover:rotate-6" />
-                  <span className="relative z-10">Explorar Portfólio</span>
-                  <ArrowRight size={18} className="relative z-10 ml-2 transition-all duration-500 group-hover:translate-x-2" />
-                </Button>
-              </Link>
-              
-              <Link href="/home#projetos">
-                <Button variant="glass" size="lg" className="group w-full sm:w-auto text-sm sm:text-base px-6 sm:px-8 py-5 sm:py-6 backdrop-blur-2xl bg-foreground/5 border-foreground/10 hover:scale-105 hover:bg-foreground/10 hover:border-primary/30 transition-all duration-500">
-                  <Code2 size={16} className="mr-2 transition-all duration-500 group-hover:rotate-180" />
-                  Ver Projetos
-                  <Zap size={14} className="ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500" />
-                </Button>
-              </Link>
-            </div>
-
-            {/* Refined Tech Stack */}
-            <div 
-              className="flex flex-wrap gap-3 sm:gap-4 items-center animate-fade-in opacity-0"
-              style={{ animationDelay: '1.1s', animationFillMode: 'forwards' }}
-            >
-              {[
-                { label: "React & Next.js", delay: "0s" },
-                { label: "TypeScript", delay: "0.15s" },
-                { label: "UI/UX Design", delay: "0.3s" }
-              ].map((tech, i) => (
-                <div 
-                  key={i}
-                  className="group relative flex items-center gap-2.5 text-xs sm:text-sm text-muted-foreground/80 px-4 py-2 rounded-full backdrop-blur-2xl bg-card/20 border border-border/30 hover:bg-card/40 hover:border-primary/30 transition-all duration-500 hover:scale-105 cursor-default"
-                >
-                  <div 
-                    className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-pulse-glow-soft"
-                    style={{ animationDelay: tech.delay }}
-                  />
-                  <span className="font-mono font-medium tracking-wide">{tech.label}</span>
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              {/* Tech Indicators */}
+              <div className="mt-16 flex flex-wrap gap-8 items-center animate-fade-in opacity-0" style={{ animationDelay: '1s' }}>
+                <div className="flex flex-col">
+                  <span className="text-3xl font-bold text-white">2+</span>
+                  <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Anos de Experiência</span>
                 </div>
-              ))}
+                <div className="h-10 w-px bg-white/10" />
+                <div className="flex flex-col">
+                  <span className="text-3xl font-bold text-white">{projects.length}+</span>
+                  <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Projetos</span>
+                </div>
+                <div className="h-10 w-px bg-white/10" />
+                <div className="flex -space-x-3">
+                  {projects.slice(0, 4).map((project, i) => (
+                    <div key={project.id} className="w-10 h-10 rounded-full border-2 border-[#050505] bg-neutral-800 overflow-hidden ring-2 ring-white/5">
+                      {project.image ? (
+                        <img src={project.image} alt="Project" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-neutral-800 flex items-center justify-center text-[8px] text-white/20">
+                          {project.id}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {projects.length > 4 && (
+                    <div className="w-10 h-10 rounded-full border-2 border-[#050505] bg-purple-600 flex items-center justify-center text-[10px] font-bold ring-2 ring-white/5">
+                      +{projects.length - 4}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Visual (Interactive Terminal/Card) */}
+            <div className="lg:col-span-5 relative hidden lg:block animate-fade-in opacity-0" style={{ animationDelay: '0.6s' }}>
+              <div className="relative group">
+                {/* Decorative Elements */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-[32px] blur-3xl opacity-50 group-hover:opacity-80 transition-opacity" />
+
+                {/* Main Card */}
+                <div className="relative glass-panel rounded-3xl p-8 overflow-hidden shadow-2xl border-white/10">
+                  <div className="flex items-center gap-2 mb-8">
+                    <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-amber-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-emerald-500/50" />
+                    <div className="ml-auto flex items-center gap-2 text-[10px] font-mono text-white/30 uppercase tracking-widest">
+                      <Layers size={12} />
+                      System Architect
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400">
+                        <Zap size={24} />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold mb-1">Desenvolvimento Full Stack</h3>
+                        <p className="text-sm text-white/40">
+                          Desenvolvimento de aplicações web escaláveis com JavaScript e TypeScript, utilizando React, Next.js e Vite. Integração com back-end por meio de APIs REST, ORMs (Prisma, Drizzle) e PostgreSQL, aplicando boas práticas de segurança, versionamento com Git/GitHub e deploy em cloud.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400">
+                        <MousePointer2 size={24} />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold mb-1">Arquitetura e Organização de Sistemas</h3>
+                        <p className="text-sm text-white/40">
+                          Experiência com arquiteturas monolíticas e baseadas em microsserviços, compreendendo a separação de responsabilidades, padrões de escalabilidade, segurança de dados e estabilidade das aplicações.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-xl bg-pink-500/10 text-pink-400">
+                        <Rocket size={24} />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold mb-1">Web Design e Experiência do Usuário</h3>
+                        <p className="text-sm text-white/40">
+                          Conhecimento em UX/UI, Visual Design e Arquitetura da Informação, com uso do Figma para criação de interfaces responsivas e intuitivas, priorizando hierarquia visual, usabilidade e consistência da experiência do usuário.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Elegant Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce-elegant opacity-0 animate-fade-in hidden sm:flex" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
-        <div className="flex flex-col items-center gap-3 text-muted-foreground/50 group cursor-pointer hover:text-muted-foreground/70 transition-colors duration-500">
-          <span className="text-[10px] font-mono tracking-[0.25em] uppercase">Scroll</span>
-          <div className="relative w-5 h-9 rounded-full border border-current flex items-start justify-center pt-2">
-            <div className="w-1 h-2 bg-current rounded-full animate-scroll-dot-smooth" />
-          </div>
-        </div>
-      </div>
-
-      {/* Refined Corner Accents */}
-      <div className="absolute top-0 right-0 w-32 sm:w-48 h-32 sm:h-48 pointer-events-none hidden md:block opacity-40">
-        <div className="absolute top-0 right-0 w-px h-12 sm:h-16 bg-gradient-to-b from-primary/30 to-transparent" />
-        <div className="absolute top-0 right-0 w-12 sm:w-16 h-px bg-gradient-to-l from-primary/30 to-transparent" />
-        <div className="absolute top-4 right-4 w-px h-8 sm:h-10 bg-gradient-to-b from-accent/20 to-transparent" />
-        <div className="absolute top-4 right-4 w-8 sm:w-10 h-px bg-gradient-to-l from-accent/20 to-transparent" />
-      </div>
-      <div className="absolute bottom-0 left-0 w-32 sm:w-48 h-32 sm:h-48 pointer-events-none hidden md:block opacity-40">
-        <div className="absolute bottom-0 left-0 w-px h-12 sm:h-16 bg-gradient-to-t from-primary/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-12 sm:w-16 h-px bg-gradient-to-r from-primary/30 to-transparent" />
-        <div className="absolute bottom-4 left-4 w-px h-8 sm:h-10 bg-gradient-to-t from-accent/20 to-transparent" />
-        <div className="absolute bottom-4 left-4 w-8 sm:w-10 h-px bg-gradient-to-r from-accent/20 to-transparent" />
-      </div>
+      </main>
     </div>
   );
 };
