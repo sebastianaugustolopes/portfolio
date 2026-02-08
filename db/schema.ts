@@ -9,6 +9,10 @@ export const projects = pgTable("projects", {
   demoUrl: varchar("demo_url", { length: 500 }),
   repoUrl: varchar("repo_url", { length: 500 }),
   image: varchar("image", { length: 500 }),
+  projectDate: varchar("project_date", { length: 20 }),
+  concept: text("concept"),
+  challenge: text("challenge"),
+  impact: text("impact"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
