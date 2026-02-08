@@ -31,7 +31,7 @@ async function seed() {
     {
       title: "Beweare E-commerce Web",
       description: "O **Bewear Ecommerce** é uma plataforma de comércio eletrônico voltada para oferecer uma experiência de compra e venda moderna, segura e intuitiva. O sistema prioriza desempenho, organização das informações e clareza no fluxo de navegação, alinhando-se a boas práticas de UX/UI para simular de forma realista o funcionamento de uma loja virtual completa. A aplicação foi estruturada com foco em escalabilidade, permitindo a inclusão de novos produtos, atualização de conteúdos e ajustes visuais de forma consistente e segura. O projeto abrange desde a camada de apresentação até a lógica de negócios, incluindo autenticação de usuários, persistência de sessão e medidas de proteção de dados, refletindo cenários reais do mercado de comércio digital.",
-      techStack: ["Nodejs","Nextjs","Reactjs","Tailwindcss", "Shadcn", "Drizzle", "PostgreSQL", "Stripe", "BetterAuth","Sonner", "Lucide"],
+      techStack: ["Nodejs", "Nextjs", "Reactjs", "Tailwindcss", "Shadcn", "Drizzle", "PostgreSQL", "Stripe", "BetterAuth", "Lucide"],
       keyFeatures: [
         "Carrinho de compras persistente",
         "Sistema de checkout completo",
@@ -44,6 +44,10 @@ async function seed() {
       demoUrl: "https://bewear-ecommerce.vercel.app/",
       repoUrl: "https://github.com/sebastianaugustolopes/bewear-ecommerce",
       image: "https://i.pinimg.com/736x/5a/f2/09/5af209987767730d3ab2d2c29e8f1777.jpg",
+      projectDate: "2025-12",
+      concept: "Criar uma plataforma de e-commerce completa e moderna que oferecesse uma experiência de compra fluida e segura, simulando um cenário real de loja virtual.",
+      challenge: "Implementar um sistema de pagamento integrado com Stripe, gerenciar sessões de usuário de forma segura com BetterAuth, e garantir performance mesmo com grande volume de produtos.",
+      impact: "Demonstrou capacidade de desenvolver aplicações full-stack complexas com integrações reais de pagamento, autenticação robusta e arquitetura escalável.",
     },
     {
       title: "Classroom Agents Api",
@@ -60,9 +64,13 @@ async function seed() {
       demoUrl: "https://classroom-agents-web-production-f754.up.railway.app/",
       repoUrl: "https://github.com/sebastianaugustolopes/bewear-ecommerce",
       image: "https://i.pinimg.com/736x/d2/a1/fe/d2a1fe6a8cf80c87c2182bcb0b56bad2.jpg",
+      projectDate: "2025-12",
+      concept: "Desenvolver uma API inteligente para gerenciamento de salas de aula com integração de IA para processamento de áudio e geração automática de respostas.",
+      challenge: "Integrar processamento de áudio com o modelo Gemini AI, garantindo respostas precisas e em tempo real, além de manter a estrutura REST organizada e escalável.",
+      impact: "Demonstrou habilidade em integrar inteligência artificial em aplicações reais, criando soluções inovadoras para o ambiente educacional.",
     },
   ];
-  
+
   await db.insert(projects).values(projectsData as NewProject[]);
 
   console.log("✅ Projects seeded");
@@ -82,7 +90,7 @@ async function seed() {
       image: "https://github.com/sebastianaugustolopes/portfolio_data/blob/main/public/certificado_2.png?raw=true"
     },
   ];
-  
+
   await db.insert(certificates).values(certificatesData as NewCertificate[]);
 
   console.log("✅ Certificates seeded");
