@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Outfit:wght@300;400;700;900&display=swap');
 
 @theme {
   /* Fonts */
-  --font-family-sans: 'Inter', sans-serif;
+  --font-family-sans: 'Outfit', sans-serif;
   --font-family-display: 'Space Grotesk', sans-serif;
+  --font-family-serif: 'Playfair Display', serif;
   --font-family-mono: 'JetBrains Mono', monospace;
 
   /* Breakpoints */
@@ -18,25 +19,25 @@
   --color-ring: hsl(40 2% 72%);
   --color-background: hsl(0 0% 0%);
   --color-foreground: hsl(80 10% 93%);
-  
+
   --color-primary: hsl(40 2% 72%);
   --color-primary-foreground: hsl(0 0% 0%);
-  
+
   --color-secondary: hsl(30 5% 37%);
   --color-secondary-foreground: hsl(80 10% 93%);
-  
+
   --color-destructive: hsl(0 84% 60%);
   --color-destructive-foreground: hsl(80 10% 93%);
-  
+
   --color-muted: hsl(0 0% 10%);
   --color-muted-foreground: hsl(40 2% 72%);
-  
+
   --color-accent: hsl(56 23% 87%);
   --color-accent-foreground: hsl(0 0% 0%);
-  
+
   --color-popover: hsl(0 0% 3%);
   --color-popover-foreground: hsl(80 10% 93%);
-  
+
   --color-card: hsl(0 0% 4%);
   --color-card-foreground: hsl(80 10% 93%);
 }
@@ -47,7 +48,7 @@
     --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-    
+
     /* Refined Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(40 2% 72%) 0%, hsl(56 23% 87%) 100%);
     --gradient-secondary: linear-gradient(135deg, hsl(30 5% 37%) 0%, hsl(40 2% 72%) 100%);
@@ -55,8 +56,8 @@
     --gradient-text-refined: linear-gradient(120deg, hsl(56 23% 90%) 0%, hsl(40 2% 75%) 50%, hsl(56 23% 90%) 100%);
     --gradient-glow: radial-gradient(ellipse at center, hsl(40 2% 72% / 0.3) 0%, hsl(56 23% 87% / 0.15) 50%, transparent 100%);
     --gradient-mesh: radial-gradient(ellipse at top left, hsl(40 2% 72% / 0.15) 0%, transparent 50%),
-                     radial-gradient(ellipse at bottom right, hsl(56 23% 87% / 0.12) 0%, transparent 50%);
-    
+      radial-gradient(ellipse at bottom right, hsl(56 23% 87% / 0.12) 0%, transparent 50%);
+
     /* Sophisticated Shadows */
     --shadow-glow: 0 0 50px hsl(40 2% 72% / 0.3), 0 0 100px hsl(40 2% 72% / 0.18);
     --shadow-glow-lg: 0 0 70px hsl(40 2% 72% / 0.4), 0 0 130px hsl(40 2% 72% / 0.25);
@@ -118,6 +119,7 @@
 }
 
 @layer utilities {
+
   /* Typography */
   .font-display {
     font-family: 'Space Grotesk', sans-serif;
@@ -188,7 +190,7 @@
 
   /* Grid Patterns */
   .grid-pattern-elegant {
-    background-image: 
+    background-image:
       linear-gradient(hsl(var(--foreground) / 0.03) 1.5px, transparent 1.5px),
       linear-gradient(90deg, hsl(var(--foreground) / 0.03) 1.5px, transparent 1.5px);
     background-size: 50px 50px;
@@ -251,6 +253,54 @@
     animation: scroll-dot-smooth 2.5s var(--ease-smooth) infinite;
   }
 
+  .animate-glow {
+    animation: glow 8s ease-in-out infinite;
+  }
+
+  .animate-scroll-dot {
+    animation: scroll-dot 2s ease-in-out infinite;
+  }
+
+  .animate-text-reveal {
+    animation: text-reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  }
+
+  /* Typography Utilities */
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Noise Texture */
+  .noise-texture {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+  }
+
+  /* Glass Panel (matching HTML) */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.3);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.5);
+  }
+
   /* Hover Effects */
   .hover-lift-elegant {
     transition: all 0.5s var(--ease-elegant);
@@ -277,6 +327,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -284,19 +335,39 @@
 }
 
 @keyframes gradient-flow {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
 }
 
+@keyframes glow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
 @keyframes glow-elegant {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.7;
     transform: scale(1.05);
@@ -304,10 +375,13 @@
 }
 
 @keyframes pulse-ambient-soft {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.4;
     transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
     opacity: 0.6;
     transform: translate(-50%, -50%) scale(1.1);
@@ -315,18 +389,23 @@
 }
 
 @keyframes float-elegant {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
     opacity: 0.25;
   }
+
   25% {
     transform: translate(12px, -25px) rotate(90deg);
     opacity: 0.5;
   }
+
   50% {
     transform: translate(-8px, -45px) rotate(180deg);
     opacity: 0.8;
   }
+
   75% {
     transform: translate(-18px, -25px) rotate(270deg);
     opacity: 0.5;
@@ -334,34 +413,45 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
+
   25% {
     transform: translateY(-8px) translateX(4px);
   }
+
   50% {
     transform: translateY(-12px) translateX(-3px);
   }
+
   75% {
     transform: translateY(-6px) translateX(5px);
   }
 }
 
 @keyframes pulse-soft {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.5;
   }
+
   50% {
     opacity: 1;
   }
 }
 
 @keyframes pulse-glow-soft {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.15);
@@ -369,22 +459,50 @@
 }
 
 @keyframes bounce-elegant {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-12px);
   }
 }
 
 @keyframes scroll-dot-smooth {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.3;
   }
+
   50% {
     transform: translateY(10px);
     opacity: 1;
+  }
+}
+
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+}
+
+@keyframes text-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -392,6 +510,7 @@
   0% {
     transform: translate(0, 0);
   }
+
   100% {
     transform: translate(50px, 50px);
   }
@@ -399,17 +518,28 @@
 
 /* Accordion Animations */
 @keyframes accordion-down {
-  from { height: 0; }
-  to { height: var(--radix-accordion-content-height); }
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--radix-accordion-content-height);
+  }
 }
 
 @keyframes accordion-up {
-  from { height: var(--radix-accordion-content-height); }
-  to { height: 0; }
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+
+  to {
+    height: 0;
+  }
 }
 
 /* Responsive Typography */
 @media (max-width: 768px) {
+
   .text-gradient,
   .text-gradient-animated {
     background-size: 150% auto;
@@ -418,6 +548,7 @@
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
