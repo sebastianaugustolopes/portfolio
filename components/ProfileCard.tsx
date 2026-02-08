@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { BadgeCheck, User, GraduationCap } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import DevTerminal from "@/components/DevTerminal";
+import React, { useEffect, useState } from "react";
+import { BadgeCheck, Globe, Star } from "lucide-react";
+import DevTerminal from "./DevTerminal";
 import type { PersonalInfo } from "@/db/schema";
-import { getFloatingIcons, IconRenderer } from "@/components/Icons";
 
 const ProfileCard = () => {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
@@ -16,8 +13,10 @@ const ProfileCard = () => {
     async function fetchPersonalInfo() {
       try {
         const res = await fetch("/api/personal-info");
-        const data = await res.json();
-        setPersonalInfo(data);
+        if (res.ok) {
+          const data = await res.json();
+          setPersonalInfo(data);
+        }
       } catch (error) {
         console.error("Error fetching personal info:", error);
       } finally {
@@ -27,73 +26,62 @@ const ProfileCard = () => {
     fetchPersonalInfo();
   }, []);
 
-  // Get floating icons from centralized component
-    const floatingIcons = getFloatingIcons(["Tailwindcss", "Reactjs", "Vuejs", "Vite", "Neon", "Drizzle"]);
-
   if (loading || !personalInfo) {
     return (
-      <div className="relative w-[400px] md:w-[450px]">
-        <div className="relative rounded-2xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/40 shadow-2xl h-[500px] animate-pulse" />
+      <div className="relative w-[340px] md:w-[400px] h-[500px] glass-panel rounded-[42px] bg-white/5 animate-pulse flex items-center justify-center">
+        <span className="text-white/20 text-xs font-mono">LOADING...</span>
       </div>
     );
   }
 
   return (
-    <div className="relative w-[400px] md:w-[450px] mt-10 lg:mt-0">
-      {/* Floating Icons - Grouped with subtle overlaps */}
-      <div className="absolute -top-4 -left-2 w-64 h-32 z-20">
-        {floatingIcons.map((icon, index) => {
-          if (!icon.floating) return null;
-          
-          return (
-            <div
-              key={icon.name}
-              className={`absolute ${icon.floating.position} animate-float ${icon.floating.rotate}`}
-              style={{ 
-                animationDelay: `${icon.floating.delay}s`, 
-                animationDuration: `${5 + index * 0.3}s`,
-                zIndex: icon.floating.zIndex
-              }}
-            >
-              <div 
-                className={`w-10 h-10 rounded-xl ${icon.floating.bgColor} ${icon.floating.textColor} ${icon.floating.borderColor ? `border ${icon.floating.borderColor}` : ''} flex items-center justify-center text-sm font-bold shadow-xl transition-all duration-300 hover:scale-125 hover:z-[70] hover:shadow-2xl p-2`}
-              >
-                <IconRenderer 
-                  icon={icon}
-                  className="w-full h-full object-contain"
-                />
+    <div className="relative group">
+      <div className="absolute -inset-10 bg-gradient-to-tr from-purple-600/10 via-indigo-500/5 to-blue-400/10 rounded-full blur-[100px] opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
+
+      <div className="relative w-[340px] md:w-[400px] glass-panel rounded-[42px] overflow-hidden border-white/10 shadow-2xl transition-all duration-700 group-hover:translate-y-[-10px] group-hover:shadow-purple-500/10">
+        <div className="relative h-[280px] w-full overflow-hidden">
+          <img
+            src={personalInfo.profilePhoto || "https://avatars.githubusercontent.com/u/93351418"}
+            alt={personalInfo.name}
+            className="w-full h-full object-cover object-top grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
+
+          <div className="absolute top-6 left-6 right-6 flex justify-between items-center">
+            <div className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest">Available</span>
+            </div>
+            <button className="w-10 h-10 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/40 hover:text-white transition-colors">
+              <Star size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div className="px-8 pb-10 -mt-8 relative z-10">
+          <div className="space-y-6">
+            <div className="flex items-end justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-2xl font-black text-white tracking-tighter uppercase">{personalInfo.name}</h3>
+                  <BadgeCheck className="text-blue-400 fill-blue-400/10" size={20} />
+                </div>
+                <div className="flex items-center gap-2 text-white/40 font-mono text-[10px] uppercase tracking-widest">
+                  <Globe size={12} />
+                  <span>{personalInfo.location || "Brazil"}</span>
+                </div>
               </div>
             </div>
-          );
-        })}
-      </div>
 
-      {/* Main Card */}
-      <div className="relative rounded-2xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/40 shadow-2xl">
-        {/* Profile Image - Large */}
-        <div className="relative h-64 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-card/95 z-10" />
-          <Image 
-            src={personalInfo.profilePhoto || "/perfil-photo.jpg"}
-            alt={personalInfo.name}
-            fill
-            className="object-cover object-top"
-          />
-        </div>
-
-        {/* Content */}
-        <div className="p-6 space-y-5">
-          {/* Name with verification */}
-          <div className="flex items-center gap-2">
-            <h3 className="text-xl font-semibold text-foreground">{personalInfo.name}</h3>
-            <BadgeCheck className="text-primary" size={20} />
-          </div>
-
-          {/* Bio */}
-          <div className="text-muted-foreground">
-            <DevTerminal />
+            <div className="relative group/terminal">
+              <div className="absolute -inset-2 bg-purple-500/5 blur-xl rounded-2xl opacity-0 group-hover/terminal:opacity-100 transition-opacity" />
+              <DevTerminal name={personalInfo.name} />
+            </div>
           </div>
         </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
       </div>
     </div>
   );
