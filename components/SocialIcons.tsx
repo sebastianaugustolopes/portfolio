@@ -9,7 +9,7 @@ interface SocialIconsProps {
   size?: number;
   className?: string;
   iconClassName?: string;
-  variant?: "default" | "compact" | "minimal";
+  variant?: "default" | "compact" | "minimal" | "ghost";
 }
 
 const SocialIcons = ({
@@ -40,18 +40,19 @@ const SocialIcons = ({
     default: "p-3 rounded-xl bg-secondary/50 border border-border/50 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]",
     compact: "p-2.5 rounded-lg bg-secondary/40 border border-border/40 text-muted-foreground transition-all duration-300 hover:text-primary hover:border-primary/40 hover:bg-secondary/60 hover:scale-110 hover:-translate-y-1",
     minimal: "p-2 rounded-lg text-muted-foreground transition-all duration-300 hover:text-primary hover:scale-110",
+    ghost: "p-2 rounded-lg transition-all duration-300 hover:bg-white/10 hover:scale-110",
   };
 
   // Create array of social links based on database data
   const links = socialLinks
     ? Object.entries(socialLinks)
-        .filter(([_, url]) => url)
-        .map(([platform, url]) => ({
-          name: platform.charAt(0).toUpperCase() + platform.slice(1),
-          icon: socialIcons[platform] || Github,
-          href: url as string,
-          color: socialColors[platform] || "hover:text-foreground",
-        }))
+      .filter(([_, url]) => url)
+      .map(([platform, url]) => ({
+        name: platform.charAt(0).toUpperCase() + platform.slice(1),
+        icon: socialIcons[platform] || Github,
+        href: url as string,
+        color: socialColors[platform] || "hover:text-foreground",
+      }))
     : [];
 
   if (links.length === 0) return null;
