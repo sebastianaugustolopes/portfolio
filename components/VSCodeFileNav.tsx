@@ -1,8 +1,33 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { ChevronRight, ChevronDown, Folder, FolderOpen, Mail, Phone, Github, Linkedin, Instagram, Globe, Terminal, X, Minus, Square, Code2, FileText, FileDown } from 'lucide-react';
-import type { PersonalInfo } from '@/db/schema';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  ChevronRight,
+  ChevronDown,
+  Folder,
+  FolderOpen,
+  Mail,
+  Phone,
+  Github,
+  Linkedin,
+  Instagram,
+  Globe,
+  Terminal as TerminalIcon,
+  X,
+  Minus,
+  Square,
+  Code2,
+  FileText,
+  FileDown,
+  Search,
+  Files,
+  Settings,
+  User,
+  Coffee,
+  GitBranch,
+  Info,
+  ChevronRight as BreadcrumbSeparator
+} from 'lucide-react';
 
 interface FileItem {
   name: string;
@@ -10,346 +35,418 @@ interface FileItem {
   icon?: React.ElementType;
   iconColor?: string;
   href?: string;
+  content?: string;
   children?: FileItem[];
+  path?: string;
 }
 
 interface FileTreeItemProps {
   item: FileItem;
   depth?: number;
   onFileClick?: (item: FileItem) => void;
+  activeFile?: string | null;
 }
 
-const FileTreeItem = ({ item, depth = 0, onFileClick }: FileTreeItemProps) => {
+const FileTreeItem: React.FC<FileTreeItemProps> = ({ item, depth = 0, onFileClick, activeFile }) => {
   const [isOpen, setIsOpen] = useState(depth < 2);
-  const [isHovered, setIsHovered] = useState(false);
+  const isActive = activeFile === item.name;
 
   if (item.type === 'folder') {
     return (
-      <div>
+      <div className="select-none">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className={`w-full flex items-center gap-2 py-2 px-3 transition-all duration-300 group ${
-            isHovered ? 'bg-primary/10 backdrop-blur-sm' : 'hover:bg-white/5'
-          }`}
-          style={{ paddingLeft: `${depth * 16 + 12}px` }}
+          className="w-full flex items-center gap-1.5 py-1 px-2 hover:bg-white/5 transition-colors group text-left outline-none"
+          style={{ paddingLeft: `${depth * 12 + 8}px` }}
         >
-          <span className={`transition-transform duration-300 ${isOpen ? 'rotate-0' : '-rotate-90'}`}>
-            {isOpen ? (
-              <ChevronDown size={16} className="text-primary/80" />
-            ) : (
-              <ChevronRight size={16} className="text-muted-foreground" />
-            )}
+          <span className={`transition-transform duration-200 ${isOpen ? 'rotate-0' : '-rotate-90'}`}>
+            <ChevronDown size={14} className={isOpen ? "text-white/60" : "text-white/30"} />
           </span>
-          <span className="transition-transform duration-300">
-            {isOpen ? (
-              <FolderOpen size={18} className="text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
-            ) : (
-              <Folder size={18} className="text-yellow-600/80" />
-            )}
-          </span>
-          <span className={`text-sm font-medium transition-colors duration-300 ${
-            isOpen ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
-          }`}>
+          {isOpen ? (
+            <FolderOpen size={16} className="text-amber-400 shrink-0" />
+          ) : (
+            <Folder size={16} className="text-amber-500/80 shrink-0" />
+          )}
+          <span className="text-[13px] font-medium text-white/70 group-hover:text-white transition-colors truncate">
             {item.name}
           </span>
-          {item.children && (
-            <span className="ml-auto text-xs text-muted-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity">
-              {item.children.length} items
-            </span>
-          )}
         </button>
-        <div className={`overflow-hidden transition-all duration-500 ease-out ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-        }`}>
-          {item.children?.map((child, index) => (
-            <FileTreeItem key={index} item={child} depth={depth + 1} onFileClick={onFileClick} />
-          ))}
-        </div>
+        {isOpen && item.children && (
+          <div className="animate-in fade-in slide-in-from-left-1 duration-200">
+            {item.children.map((child, index) => (
+              <FileTreeItem
+                key={index}
+                item={child}
+                depth={depth + 1}
+                onFileClick={onFileClick}
+                activeFile={activeFile}
+              />
+            ))}
+          </div>
+        )}
       </div>
     );
   }
 
   const IconComponent = item.icon || FileText;
 
-  const isPDF = item.href?.endsWith('.pdf');
-  const isExternalLink = item.href?.startsWith('http');
-  const isCV = item.href?.includes('Sebastian CV');
-
   return (
-    <a
-      href={item.href}
-      download={isPDF ? (isCV ? 'Sebastian CV.docx.pdf' : item.name) : undefined}
-      target={isExternalLink ? '_blank' : undefined}
-      rel={isExternalLink ? 'noopener noreferrer' : undefined}
+    <button
       onClick={() => onFileClick?.(item)}
-      className="flex items-center gap-3 py-2 px-3 hover:bg-primary/10 transition-all duration-300 group cursor-pointer relative overflow-hidden"
-      style={{ paddingLeft: `${depth * 16 + 36}px` }}
+      className={`w-full flex items-center gap-2 py-1 px-2 transition-all duration-200 group relative text-left outline-none ${isActive ? 'bg-purple-500/10 border-l-2 border-purple-500' : 'hover:bg-white/5 border-l-2 border-transparent'
+        }`}
+      style={{ paddingLeft: `${depth * 12 + 24}px` }}
     >
-      {/* Hover glow effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      
-      <IconComponent 
-        size={18} 
-        className={`${item.iconColor || 'text-muted-foreground'} shrink-0 transition-all duration-300 group-hover:scale-125 group-hover:drop-shadow-[0_0_10px_currentColor]`} 
+      <IconComponent
+        size={14}
+        className={`${isActive ? (item.iconColor || 'text-white') : (item.iconColor || 'text-white/40')} shrink-0 group-hover:scale-110 transition-transform`}
       />
-      <span className="text-sm text-muted-foreground group-hover:text-foreground transition-all duration-300 truncate relative z-10">
+      <span className={`text-[13px] transition-colors truncate ${isActive ? 'text-white' : 'text-white/50 group-hover:text-white/80'}`}>
         {item.name}
       </span>
-      
-      {/* Arrow indicator */}
-      <ChevronRight 
-        size={14} 
-        className="ml-auto text-primary/0 group-hover:text-primary/80 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0" 
-      />
-    </a>
+      {isActive && (
+        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+      )}
+    </button>
   );
 };
 
 const VSCodeFileNav = () => {
   const [activeTab, setActiveTab] = useState('explorer');
-  const [lastClickedFile, setLastClickedFile] = useState<string | null>(null);
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
+  const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
+  const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const terminalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    async function fetchPersonalInfo() {
-      try {
-        const res = await fetch("/api/personal-info");
-        if (res.ok) {
-          const data = await res.json();
-          setPersonalInfo(data);
-        }
-      } catch (error) {
-        console.error("Error fetching personal info:", error);
-      }
-    }
-    fetchPersonalInfo();
-  }, []);
-
-  // Function to format phone number for WhatsApp
-  const formatWhatsAppNumber = (phone: string | null | undefined): string | null => {
-    if (!phone) return null;
-    const cleaned = phone.replace(/[\s()\-]/g, "");
-    const formatted = cleaned.startsWith("+") ? cleaned : `+55${cleaned}`;
-    return `https://wa.me/${formatted.replace("+", "")}`;
-  };
-
-  // Create file structure based on database data
-  const contactFiles: FileItem[] = personalInfo ? [
+  const contactFiles: FileItem[] = [
     {
-      name: 'contatos',
+      name: 'src',
       type: 'folder',
+      path: 'src',
       children: [
         {
-          name: 'email.txt',
-          type: 'file',
-          icon: Mail,
-          iconColor: 'text-blue-400',
-          href: 'mailto:sebastianaugustolopescamargo@gmail.com',
+          name: 'contacts',
+          type: 'folder',
+          path: 'src/contacts',
+          children: [
+            {
+              name: 'email.ts',
+              type: 'file',
+              path: 'src/contacts/email.ts',
+              icon: Mail,
+              iconColor: 'text-blue-400',
+              href: 'mailto:sebastianaugustolopescamargo@gmail.com',
+              content: `// Standard Contact Logic\nexport const contact = {\n  email: "sebastianaugustolopescamargo@gmail.com",\n  availability: "High",\n  timezone: "GMT-3",\n  response_time: "< 24h"\n};\n\n/**\n * Triggers a direct connection\n */\nexport function connect() {\n  return console.log("Connecting to core...");\n}`
+            },
+            {
+              name: 'whatsapp.ts',
+              type: 'file',
+              path: 'src/contacts/whatsapp.ts',
+              icon: Phone,
+              iconColor: 'text-emerald-400',
+              href: 'https://wa.me/5531987962420',
+              content: `import { messaging } from "@core/services";\n\nexport const sendMessage = (message: string) => {\n  return messaging.whatsapp({\n    to: "+55 11 99999-9999",\n    body: message || "Hello from Portfolio!"\n  });\n};`
+            },
+            {
+              name: 'socials.json',
+              type: 'file',
+              path: 'src/contacts/socials.json',
+              icon: Globe,
+              iconColor: 'text-purple-400',
+              content: `{\n  "github": "https://github.com/sebastianaugustolopes",\n  "linkedin": "https://www.linkedin.com/in/sebastianaugusto/",\n  "instagram": "@_ssebastianaugusto",\n}`
+            }
+          ],
         },
         {
-          name: 'telefone.txt',
+          name: 'resume.pdf',
           type: 'file',
-          icon: Phone,
-          iconColor: 'text-green-400',
-          href: formatWhatsAppNumber(personalInfo.phone) || undefined,
-        },
-        ...(personalInfo.socialLinks?.github ? [{
-          name: 'github.url',
-          type: 'file' as const,
-          icon: Github,
-          iconColor: 'text-gray-400',
-          href: personalInfo.socialLinks.github,
-        }] : []),
-        ...(personalInfo.socialLinks?.linkedin ? [{
-          name: 'linkedin.url',
-          type: 'file' as const,
-          icon: Linkedin,
-          iconColor: 'text-blue-500',
-          href: personalInfo.socialLinks.linkedin,
-        }] : []),
-        ...(personalInfo.socialLinks?.instagram ? [{
-          name: 'instagram.url',
-          type: 'file' as const,
-          icon: Instagram,
-          iconColor: 'text-pink-500',
-          href: personalInfo.socialLinks.instagram,
-        }] : []),
-        {
-          name: 'curriculo.pdf',
-          type: 'file',
+          path: 'sebastian_augusto_cv.docx.pdf',
           icon: FileDown,
-          iconColor: 'text-red-400',
-          href: '/documents/sebastian_augusto_cv_docx.pdf',
-        },
+          iconColor: 'text-rose-400',
+          href: '#',
+          content: `// BINARY DATA [PDF Document]\n// Content-Type: application/pdf\n// Size: 2.4 MB\n// Status: Ready for download\n\n[CLICK_BUTTON_BELOW_TO_EXPORT]`
+        }
       ],
     },
-  ] : [];
+    {
+      name: 'package.json',
+      type: 'file',
+      path: 'package.json',
+      icon: Settings,
+      iconColor: 'text-blue-500',
+      content: `{\n  "name": "sebastian-portfolio",\n  "version": "3.0.0",\n  "private": true,\n  "dependencies": {\n    "passion": "latest",\n    "react": "^19.0.0",\n    "typescript": "^5.0.0",\n    "logic": "stable"\n  },\n  "scripts": {\n    "deploy": "impact --global"\n  }\n}`
+    }
+  ];
+
+  useEffect(() => {
+    if (activeTab === 'terminal' && terminalOutput.length === 0) {
+      runTerminalSimulation();
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, [terminalOutput]);
+
+  const runTerminalSimulation = async () => {
+    setIsTyping(true);
+    const commands = [
+      "npm install connections...",
+      "Resolving dependencies...",
+      "Authenticated as @sebastian-augusto",
+      "Syncing contact nodes...",
+      "Status: Port 8080 online and ready.",
+      "READY: Type 'help' for command list."
+    ];
+
+    for (const cmd of commands) {
+      setTerminalOutput(prev => [...prev, `[LOG] ${cmd}`]);
+      await new Promise(r => setTimeout(r, 800));
+    }
+    setIsTyping(false);
+  };
 
   const handleFileClick = (item: FileItem) => {
-    setLastClickedFile(item.name);
-    setTimeout(() => setLastClickedFile(null), 2000);
+    setSelectedFile(item);
+    if (item.href && item.href !== '#') {
+      window.open(item.href, '_blank');
+    }
+  };
+
+  const renderHighlightedCode = (content: string) => {
+    if (!content) return null;
+    return content.split('\n').map((line, i) => (
+      <div key={i} className="flex gap-6 hover:bg-white/5 px-2 -mx-2 transition-colors group/line">
+        <span className="w-10 shrink-0 text-white/10 select-none text-right font-mono text-[12px] group-hover/line:text-white/30 transition-colors">{i + 1}</span>
+        <span className="font-mono text-[13px] leading-relaxed">
+          {line.split(/(\s+|[{}():,;[\]"])/).map((part, j) => {
+            if (['export', 'const', 'import', 'from', 'return', 'function', 'true', 'false', 'private'].includes(part.trim())) {
+              return <span key={j} className="text-purple-400">{part}</span>;
+            }
+            if (part.startsWith('"') || part.endsWith('"')) {
+              return <span key={j} className="text-amber-200">{part}</span>;
+            }
+            if (part.startsWith('//') || part.startsWith('/*') || part.startsWith(' *')) {
+              return <span key={j} className="text-white/20 italic">{part}</span>;
+            }
+            if (['{', '}', '(', ')', '[', ']', ':', ',', ';', '='].includes(part)) {
+              return <span key={j} className="text-white/40">{part}</span>;
+            }
+            if (/[A-Z]/.test(part[0]) && part.length > 2) {
+              return <span key={j} className="text-cyan-400">{part}</span>;
+            }
+            return <span key={j} className="text-white/70">{part}</span>;
+          })}
+        </span>
+      </div>
+    ));
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto backdrop-blur-2xl bg-black/70 border border-border/30 rounded-xl overflow-hidden shadow-2xl shadow-primary/10 transition-all duration-500 hover:shadow-primary/20 hover:border-border/50 relative">
-      {/* Background glow effects */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
-        <div className="absolute top-0 left-1/4 w-[300px] h-[300px] bg-primary/10 rounded-full blur-[120px] animate-glow-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[250px] h-[250px] bg-accent/8 rounded-full blur-[100px] animate-glow-pulse" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[150px]" />
-      </div>
-      
-      {/* VS Code Title Bar */}
-      <div className="bg-black/60 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-border/20 relative z-10">
-        <div className="flex items-center gap-3">
+    <div className="w-full max-w-5xl mx-auto glass-panel rounded-2xl overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] border-white/5 flex flex-col h-[650px] animate-fade-in group">
+
+      {/* Title Bar */}
+      <div className="bg-[#0f0f0f] px-4 py-2 flex items-center justify-between border-b border-white/5 select-none">
+        <div className="flex items-center gap-8">
           <div className="flex gap-2">
-            <button className="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors flex items-center justify-center group">
-              <X size={8} className="text-red-900 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-            <button className="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-500 transition-colors flex items-center justify-center group">
-              <Minus size={8} className="text-yellow-900 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-            <button className="w-3.5 h-3.5 rounded-full bg-green-500/80 hover:bg-green-500 transition-colors flex items-center justify-center group">
-              <Square size={6} className="text-green-900 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56] opacity-80" />
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e] opacity-80" />
+            <div className="w-3 h-3 rounded-full bg-[#27c93f] opacity-80" />
           </div>
-          <div className="flex items-center gap-2 ml-4">
-            <Code2 size={16} className="text-primary" />
-            <span className="text-sm text-foreground/80 font-medium">Sebastian Augusto - Contatos</span>
+          <div className="flex items-center gap-2 text-white/40">
+            <Code2 size={14} className="text-purple-500" />
+            <span className="text-[11px] font-mono tracking-wider uppercase font-bold">sebastian-augusto — portfolio</span>
           </div>
         </div>
-        
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-          <span className="hidden sm:block">Arquivo</span>
-          <span className="hidden sm:block">Editar</span>
-          <span className="hidden sm:block">Exibir</span>
-          <span className="hidden sm:block">Ajuda</span>
+        <div className="hidden lg:flex items-center gap-6 text-[10px] font-mono text-white/20 uppercase tracking-[0.2em]">
+          <span className="hover:text-white/40 cursor-pointer transition-colors">File</span>
+          <span className="hover:text-white/40 cursor-pointer transition-colors">Edit</span>
+          <span className="hover:text-white/40 cursor-pointer transition-colors">Selection</span>
+          <span className="hover:text-white/40 cursor-pointer transition-colors">Terminal</span>
+          <span className="hover:text-white/40 cursor-pointer transition-colors">Help</span>
         </div>
       </div>
 
-      {/* Tab Bar */}
-      <div className="bg-black/50 backdrop-blur-xl flex items-center border-b border-border/20 relative z-10">
-        <button
-          onClick={() => setActiveTab('explorer')}
-          className={`px-6 py-3 text-sm font-medium transition-all duration-300 relative ${
-            activeTab === 'explorer' 
-              ? 'text-foreground bg-black/40' 
-              : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <Folder size={14} className="text-yellow-500" />
-            <span>Explorer</span>
-          </div>
-          {activeTab === 'explorer' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary animate-scale-in" />
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab('terminal')}
-          className={`px-6 py-3 text-sm font-medium transition-all duration-300 relative ${
-            activeTab === 'terminal' 
-              ? 'text-foreground bg-black/40' 
-              : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <Terminal size={14} className="text-green-500" />
-            <span>Terminal</span>
-          </div>
-          {activeTab === 'terminal' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary animate-scale-in" />
-          )}
-        </button>
-      </div>
-
-      {/* Content Area */}
-      <div className="flex min-h-[400px] relative z-10">
-        {/* Sidebar */}
-        <div className="w-12 bg-black/40 backdrop-blur-xl border-r border-border/20 flex flex-col items-center py-4 gap-4">
-          <button 
-            className={`p-2 rounded-lg transition-all duration-300 ${
-              activeTab === 'explorer' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-white/10'
-            }`}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Activity Bar */}
+        <div className="w-14 bg-[#0a0a0a] border-r border-white/5 flex flex-col items-center py-4 gap-6 select-none">
+          <button
             onClick={() => setActiveTab('explorer')}
+            className={`p-2.5 rounded-lg transition-all relative ${activeTab === 'explorer' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
           >
-            <Folder size={20} />
+            <Files size={24} strokeWidth={activeTab === 'explorer' ? 2 : 1.5} />
+            {activeTab === 'explorer' && <div className="absolute left-[-14px] top-1/2 -translate-y-1/2 w-0.5 h-full bg-purple-500 rounded-r" />}
           </button>
-          <button 
-            className={`p-2 rounded-lg transition-all duration-300 ${
-              activeTab === 'terminal' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-white/10'
-            }`}
-            onClick={() => setActiveTab('terminal')}
-          >
-            <Terminal size={20} />
+          <button className="p-2.5 rounded-lg text-white/20 hover:text-white/40 transition-all">
+            <Search size={24} strokeWidth={1.5} />
           </button>
-          <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/10 transition-all duration-300">
-            <Github size={20} />
+          <button className="p-2.5 rounded-lg text-white/20 hover:text-white/40 transition-all">
+            <GitBranch size={24} strokeWidth={1.5} />
           </button>
+          <button className="p-2.5 rounded-lg text-white/20 hover:text-white/40 transition-all">
+            <Github size={24} strokeWidth={1.5} />
+          </button>
+          <div className="mt-auto space-y-4 pb-2">
+            <button className="p-2.5 rounded-lg text-white/20 hover:text-white/40 transition-all">
+              <User size={24} strokeWidth={1.5} />
+            </button>
+            <button className="p-2.5 rounded-lg text-white/20 hover:text-white/40 transition-all">
+              <Settings size={24} strokeWidth={1.5} />
+            </button>
+          </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1">
-          {activeTab === 'explorer' ? (
-            <div className="py-3 font-mono">
-              {/* Header */}
-              <div className="px-4 py-2 text-xs text-muted-foreground/70 uppercase tracking-wider flex items-center justify-between">
-                <span>Explorer</span>
-                <span className="text-primary/50">...</span>
-              </div>
-              
-              {/* File Tree */}
-              <div className="overflow-hidden">
-                {contactFiles.map((item, index) => (
-                  <FileTreeItem key={index} item={item} onFileClick={handleFileClick} />
+        {/* Sidebar */}
+        <div className="w-60 bg-[#0c0c0c] border-r border-white/5 flex flex-col overflow-y-auto custom-scrollbar select-none">
+          <div className="px-5 py-4 text-[10px] font-black text-white/20 uppercase tracking-[0.3em] flex items-center justify-between border-b border-white/5 mb-2">
+            <span>Explorer</span>
+            <ChevronDown size={14} className="opacity-50" />
+          </div>
+          <div className="flex-1 py-1">
+            {contactFiles.map((item, index) => (
+              <FileTreeItem
+                key={index}
+                item={item}
+                onFileClick={handleFileClick}
+                activeFile={selectedFile?.name}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Main Editor */}
+        <div className="flex-1 flex flex-col bg-[#080808] relative overflow-hidden">
+
+          {/* Tabs & Breadcrumbs Bar */}
+          <div className="flex flex-col border-b border-white/5 bg-[#0a0a0a]">
+            {/* Tabs */}
+            <div className="h-10 flex items-center overflow-x-auto no-scrollbar select-none">
+              {selectedFile && (
+                <div className="h-full px-4 flex items-center gap-2 bg-[#080808] border-r border-white/5 min-w-[150px] relative">
+                  <div className="absolute top-0 left-0 w-full h-[2px] bg-purple-500" />
+                  {React.createElement(selectedFile.icon || FileText, { size: 14, className: selectedFile.iconColor })}
+                  <span className="text-xs text-white/90 font-medium truncate">{selectedFile.name}</span>
+                  <X size={12} className="ml-auto text-white/20 hover:text-white/80 cursor-pointer p-0.5 rounded transition-colors" onClick={(e) => { e.stopPropagation(); setSelectedFile(null); }} />
+                </div>
+              )}
+              <button
+                onClick={() => setActiveTab('terminal')}
+                className={`h-full px-6 flex items-center gap-2 border-r border-white/5 text-[11px] font-bold uppercase tracking-wider transition-colors ${activeTab === 'terminal' ? 'bg-[#080808] text-purple-400' : 'text-white/20 hover:bg-white/5'}`}
+              >
+                <TerminalIcon size={14} />
+                Terminal
+              </button>
+            </div>
+
+            {/* Breadcrumbs */}
+            {selectedFile && (
+              <div className="h-8 flex items-center px-4 gap-2 text-[10px] text-white/30 font-mono border-t border-white/5 select-none">
+                <Files size={12} />
+                <BreadcrumbSeparator size={10} />
+                {selectedFile.path?.split('/').map((part, i, arr) => (
+                  <React.Fragment key={i}>
+                    <span className={i === arr.length - 1 ? 'text-white/60 font-bold' : ''}>{part}</span>
+                    {i < arr.length - 1 && <BreadcrumbSeparator size={10} />}
+                  </React.Fragment>
                 ))}
               </div>
-            </div>
-          ) : (
-            <div className="p-4 font-mono text-sm">
-              <div className="text-green-400 mb-2">$ whoami</div>
-              <div className="text-muted-foreground mb-4">{personalInfo?.name.toLowerCase().replace(/\s/g, '-') || 'sebastian-augusto'}</div>
-              <div className="text-green-400 mb-2">$ cat contato.txt</div>
-              <div className="text-muted-foreground space-y-1">
-                {personalInfo?.email && (
-                  <p>📧 {personalInfo.email}</p>
+            )}
+          </div>
+
+          {/* Editor Content Area */}
+          <div className="flex-1 overflow-auto custom-scrollbar relative">
+            {activeTab === 'terminal' ? (
+              <div ref={terminalRef} className="h-full p-8 font-mono text-[13px] text-emerald-400/80 leading-relaxed overflow-y-auto bg-black/40 backdrop-blur-sm">
+                <div className="flex items-center gap-3 text-white/30 mb-8 pb-4 border-b border-white/5">
+                  <Coffee size={18} />
+                  <span className="text-xs font-bold tracking-[0.2em] uppercase">Development Terminal v3.0.4 — Runtime Active</span>
+                </div>
+                {terminalOutput.map((line, i) => (
+                  <div key={i} className="animate-in fade-in slide-in-from-bottom-1 duration-500 flex gap-4">
+                    <span className="text-white/10 shrink-0 select-none">[{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}]</span>
+                    <span>{line}</span>
+                  </div>
+                ))}
+                {isTyping && (
+                  <div className="flex items-center gap-2 text-white/40 mt-2">
+                    <span className="animate-pulse">_</span>
+                  </div>
                 )}
-                {personalInfo?.phone && (
-                  <p>📱 {personalInfo.phone}</p>
+                {!isTyping && (
+                  <div className="flex items-center gap-3 text-purple-400 mt-4 font-bold">
+                    <span className="text-white/40">➜</span>
+                    <span>sebastian@portfolio</span>
+                    <span className="text-white/40">~ %</span>
+                    <span className="w-2 h-4 bg-purple-500/60 animate-pulse ml-1" />
+                  </div>
                 )}
               </div>
-              <div className="text-green-400 mt-4 flex items-center gap-2">
-                <span>$</span>
-                <span className="animate-pulse">_</span>
+            ) : selectedFile ? (
+              <div className="p-8 pb-32 animate-in fade-in duration-500">
+                <div className="flex items-center gap-4 text-white/5 mb-10 border-b border-white/5 pb-4 select-none">
+                  <Info size={14} />
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em]">Read-Only Mode — Syntax Highlighted Source</span>
+                </div>
+                <div className="relative">
+                  {renderHighlightedCode(selectedFile.content || '')}
+                </div>
+
+                {/* PDF Special Action */}
+                {selectedFile.name.endsWith('.pdf') && (
+                  <div className="mt-12 p-8 rounded-3xl bg-purple-500/5 border border-purple-500/10 text-center space-y-4">
+                    <FileDown size={40} className="mx-auto text-purple-400" />
+                    <h4 className="text-white font-bold uppercase tracking-widest text-sm">Resume Asset Detected</h4>
+                    <p className="text-white/40 text-xs max-w-xs mx-auto">Click to download a high-resolution version of the professional resume.</p>
+                    <a
+                      href="/documents/sebastian_augusto_cv.docx.pdf"
+                      download="Sebastian_Augusto_CV.pdf"
+                      className="inline-block px-8 py-3 rounded-full bg-purple-500 text-white text-[11px] font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                    >
+                      Download CV.pdf
+                    </a>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center space-y-8 select-none">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-purple-500/10 rounded-full blur-3xl" />
+                  <Code2 size={100} strokeWidth={0.5} className="text-white/5 relative z-10" />
+                </div>
+                <div className="text-center space-y-3">
+                  <p className="text-xl font-black uppercase tracking-[0.6em] text-white/20">PORTFOLIO</p>
+                  <p className="text-[10px] font-mono text-white/10 uppercase tracking-[0.2em]">Selecione um arquivo para ver os detalhes </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      
+
       {/* Status Bar */}
-      <div className="bg-primary/90 backdrop-blur-sm px-4 py-1.5 flex items-center justify-between text-xs border-t border-primary/50">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Github size={12} className="text-primary-foreground" />
-            <span className="text-primary-foreground/90">main</span>
+      <div className="bg-[#007acc] px-4 py-1.5 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-white select-none">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 hover:bg-white/10 px-2 py-0.5 rounded transition-colors cursor-pointer group">
+            <GitBranch size={12} className="group-hover:rotate-12 transition-transform" />
+            <span>main*</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-primary-foreground/70">Sincronizado</span>
+            <div className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
+            <span>Sync Complete</span>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-primary-foreground/70">
-          {lastClickedFile && (
-            <span className="text-primary-foreground animate-fade-in">
-              Abrindo: {lastClickedFile}
-            </span>
-          )}
-          <span className="hidden sm:block">UTF-8</span>
-          <span className="hidden sm:block">TypeScript React</span>
-          <span className="hidden sm:block">Ln 1, Col 1</span>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
+            <span className="hidden sm:block opacity-60">Spaces: 2</span>
+            <span className="hidden sm:block opacity-60">UTF-8</span>
+            <span className="hidden sm:block">TypeScript React</span>
+          </div>
+          <div className="flex items-center gap-1.5 group cursor-pointer hover:bg-white/10 px-2 py-0.5 rounded transition-colors">
+            <div className="w-2 h-2 rounded-full bg-white/20 group-hover:bg-white/40" />
+            <span>Ln 1, Col 1</span>
+          </div>
         </div>
       </div>
     </div>
