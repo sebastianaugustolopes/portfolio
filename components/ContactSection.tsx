@@ -6,7 +6,7 @@ const ContactSection = () => {
   return (
     <section id="contato" className="py-24 relative overflow-hidden">
       {/* Dark blurred background */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
+      <div className="absolute inset-0  backdrop-blur-xl" />
       
       {/* Glow effects */}
       <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[180px] animate-glow-pulse" />
@@ -43,13 +43,6 @@ const ContactSection = () => {
           <div className="flex justify-center">
             <VSCodeFileNav />
           </div>
-        </ScrollReveal>
-        
-        {/* Hint text */}
-        <ScrollReveal delay={0.5}>
-          <p className="text-center text-muted-foreground/60 text-sm mt-6">
-            💡 Clique nas pastas para expandir e nos arquivos para acessar os links
-          </p>
         </ScrollReveal>
       </div>
     </section>
